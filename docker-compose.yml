@@ -1,0 +1,13 @@
+version: '2'
+services:
+  zira-client:
+    restart: always
+    image: zira-prometheus
+    container_name: zira-prometheus
+    ports:
+      - '8081'
+    networks:
+      - zira
+networks:
+  zira:
+    external: true
