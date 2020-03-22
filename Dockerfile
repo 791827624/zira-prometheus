@@ -1,7 +1,7 @@
 FROM nginx:latest
 MAINTAINER 791827624@qq.com
 
-COPY dist/  /usr/share/nginx/html
+COPY package.json  /tmp/
 RUN cd /tmp && yarn install
 RUN mkdir -p /app && cp -a /tmp/node_modules /app/
 
