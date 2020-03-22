@@ -9,7 +9,7 @@ module.exports = {
         },
         proxy: {
             './': {
-                target: 'http://101.132.169.36:9090',
+                target: 'http://localhost:9090',
                 changeOrigin: true,
                 secure: false,
                 /*pathRewrite: { }*/
