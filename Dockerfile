@@ -1,5 +1,4 @@
-FROM nginx:latest
-MAINTAINER 791827624@qq.com
+FROM tiangolo/node-frontend:10 as build-stage
 
 COPY package.json  /tmp/
 RUN cd /tmp && yarn install
