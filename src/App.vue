@@ -10,25 +10,39 @@
                   background-color="#545c64"
                   text-color="#fff"
                   active-text-color="#ffd04b">
-            <el-menu-item index="1" disabled>Dashboard</el-menu-item>
-            <el-menu-item index="3"><a href="/alerts">告警</a></el-menu-item>
-            <el-menu-item index="5">Graph</el-menu-item>
+            <el-menu-item index="1" disabled>Web consoles</el-menu-item>
+            <el-menu-item index="3"><a href="http://localhost:9090/alerts">告警</a></el-menu-item>
+            <el-menu-item index="5">Web consoles</el-menu-item>
             <el-submenu index="2">
-              <template slot="title">Status</template>
-              <el-menu-item index="2-1"><a href="/status" target="_blank">Runtime & Build Information</a></el-menu-item>
-              <el-menu-item index="2-2"><a href="/flags" target="_blank">Command-Line Flags</a></el-menu-item>
-              <el-menu-item index="2-3"><a href="/config" target="_blank">设置</a></el-menu-item>
-              <el-menu-item index="2-4"><a href="/rules" target="_blank">规则</a></el-menu-item>
-              <el-menu-item index="2-5"><a href="/targets" target="_blank">抓取目标</a></el-menu-item>
-              <el-menu-item index="2-6"><a href="/service-discovery" target="_blank">Service Discovery</a></el-menu-item>
+              <template slot="title">状态</template>
+              <el-menu-item index="2-1"><a href="http://localhost:9090/status" target="_blank" >运行与构建时间</a></el-menu-item>
+              <el-menu-item index="2-2"><a href="http://localhost:9090/flags" target="_blank">命令行标志</a></el-menu-item>
+              <el-menu-item index="2-3"><a href="http://localhost:9090/config" target="_blank">设置</a></el-menu-item>
+              <el-menu-item index="2-4"><a href="http://localhost:9090/rules" target="_blank">规则</a></el-menu-item>
+              <el-menu-item index="2-5"><a href="http://localhost:9090/targets" target="_blank">抓取目标</a></el-menu-item>
+              <el-menu-item index="2-6"><a href="http://localhost:9090/service-discovery" target="_blank">服务与发现</a></el-menu-item>
             </el-submenu>
-            <el-menu-item index="4"><a href="https://prometheus.io/docs/prometheus/latest/getting_started/">Help</a></el-menu-item>
+            <el-menu-item index="4"><a href="https://prometheus.io/docs/prometheus/latest/getting_started/">帮助</a></el-menu-item>
           </el-menu>
         </div>
         <div class="circle" v-for="cItem in dataHtml" :key="cItem.id">
           <div class="page">
+
+<!--            <tr v-for="item in search(this.dataHtml.value)" :key="item.id">-->
+<!--              <td>{{item.id}}</td>-->
+<!--              <td></td>-->
+<!--              <td></td>-->
+<!--            </tr>-->
+<!--            {{dataHtml[0].value}}-->
             <div class="title">
-              <el-input v-model="cItem.value" placeholder="输入要查询的指标名称"></el-input>
+              <el-input v-model.trim="cItem.value" placeholder="输入要查询的指标名称" ></el-input>
+              <ul v-for="item in search(options)"
+                  role="listbox"
+                  :key="item"
+                  :label="item"
+                  style="top: 38px; left: 5px; display: block;">
+
+              </ul>
               <div class="button-area">
                 <el-button type="primary" @click="getJson(cItem.id)">查询</el-button>
                 <el-select v-model="cItem.value" placeholder="- insert -">
@@ -37,11 +51,12 @@
                     - insert -
                   </el-option>
                   <el-option
-                          v-for="item in options"
+                          v-for="item in search(options)"
                           :key="item"
                           :label="item"
                           :value="item">
                   </el-option>
+
                 </el-select>
               </div>
             </div>
@@ -66,13 +81,16 @@
             </div>
           </div>
         </div>
+
+<!--        {{this.selection.data}}-->
+
         <div class="operation">
           <el-button type="primary" @click="addGraph">
             添加查询
           </el-button>
         </div>
       </div>
-    <div id="login" v-if="showLogin">
+    <div id="login" v-if="showLogin" >
       <div class="login-center center-width">
         <div class="center-right">
           <h1>用户登录</h1>
@@ -133,32 +151,38 @@
 <script>
 import axios from 'axios';
 import { message } from 'ant-design-vue';
-
+//   'go_gc_duration_seconds_count',
+//   'go_gc_duration_seconds_sum', 'go_goroutines', 'go_info', 'go_memstats_alloc_bytes',
+//   'go_memstats_alloc_bytes_total', 'go_memstats_buck_hash_sys_bytes', 'go_memstats_frees_total',
+// 'go_memstats_gc_cpu_fraction', 'go_memstats_gc_sys_bytes', 'go_memstats_heap_alloc_bytes',
+// 'go_memstats_heap_idle_bytes', 'go_memstats_heap_inuse_bytes', 'go_memstats_heap_objects'
 export default {
   name: 'App',
   data () {
     return {
       id: 1,
+      kw:'',
       dataHtml: [{ id: 1, value: '', dataSource: [], spin: false }],
-      options: ['go_gc_duration_seconds', 'go_gc_duration_seconds_count',
-        'go_gc_duration_seconds_sum', 'go_goroutines', 'go_info', 'go_memstats_alloc_bytes',
-        'go_memstats_alloc_bytes_total', 'go_memstats_buck_hash_sys_bytes', 'go_memstats_frees_total',
-      'go_memstats_gc_cpu_fraction', 'go_memstats_gc_sys_bytes', 'go_memstats_heap_alloc_bytes',
-      'go_memstats_heap_idle_bytes', 'go_memstats_heap_inuse_bytes', 'go_memstats_heap_objects'],
+      options: [],
+      selection:[{id:1,value:''},{id:2,value:''}],
       value: '',
       activeIndex2: '5',
       dataSource: [],
       spin: false,
       showLogin: true,
-      form: this.$form.createForm(this)
+      form: this.$form.createForm(this),
+
     }
   },
    methods: {
+      search(){
+            return this.options.filter(item => item.includes(this.dataHtml[0].value.substring(0,5)))
+      },
      handleSelect(key, keyPath) {
        console.log(key, keyPath);
      },
      getJson (id) {
-       this.dataHtml.filter( item => item.id === id)[0].spin = true;
+       this.dataHtml.find( item => item.id === id).spin = true;
        axios({
          url: '/api/v1/query',
          method: 'get',
@@ -183,10 +207,30 @@ export default {
      },
      login () {
        this.showLogin = false;
-     }
+     },
+     Get(){
+       axios({
+         url:'/api/v1/label/__name__/values',
+         method:'get',
+          params:{
+            _:'123'
+          }
+       }).then( res =>{
+           this.options = res.data.data
+           // this.options=[...this.options,...this.selection.data]
+           // console.log(this.options)
+       }).catch( () => {
+         message.error('请求异常!');
+       })
+     },
+
    },
   mounted() {
     document.querySelector('#login').style.height = document.documentElement.clientHeight + 'px';
+
+  },
+  created() {
+    this.Get()
   }
 }
 </script>
