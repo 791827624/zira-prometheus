@@ -11,16 +11,16 @@
                   text-color="#fff"
                   active-text-color="#ffd04b">
             <el-menu-item index="1" disabled>Web consoles</el-menu-item>
-            <el-menu-item index="3"><a href="http://localhost:9090/alerts">告警</a></el-menu-item>
+            <el-menu-item index="3"><a href="http://101.132.169.36:9090/alerts">告警</a></el-menu-item>
             <el-menu-item index="5">Web consoles</el-menu-item>
             <el-submenu index="2">
               <template slot="title">状态</template>
-              <el-menu-item index="2-1"><a href="http://localhost:9090/status" target="_blank" >运行与构建时间</a></el-menu-item>
-              <el-menu-item index="2-2"><a href="http://localhost:9090/flags" target="_blank">命令行标志</a></el-menu-item>
-              <el-menu-item index="2-3"><a href="http://localhost:9090/config" target="_blank">设置</a></el-menu-item>
-              <el-menu-item index="2-4"><a href="http://localhost:9090/rules" target="_blank">规则</a></el-menu-item>
-              <el-menu-item index="2-5"><a href="http://localhost:9090/targets" target="_blank">抓取目标</a></el-menu-item>
-              <el-menu-item index="2-6"><a href="http://localhost:9090/service-discovery" target="_blank">服务与发现</a></el-menu-item>
+              <el-menu-item index="2-1"><a href="http://101.132.169.36:9090/status" target="_blank" >运行与构建时间</a></el-menu-item>
+              <el-menu-item index="2-2"><a href="http://101.132.169.36:9090/flags" target="_blank">命令行标志</a></el-menu-item>
+              <el-menu-item index="2-3"><a href="http://101.132.169.36:9090/config" target="_blank">设置</a></el-menu-item>
+              <el-menu-item index="2-4"><a href="http://101.132.169.36:9090/rules" target="_blank">规则</a></el-menu-item>
+              <el-menu-item index="2-5"><a href="http://101.132.169.36:9090/targets" target="_blank">抓取目标</a></el-menu-item>
+              <el-menu-item index="2-6"><a href="http://101.132.169.36:9090/service-discovery" target="_blank">服务与发现</a></el-menu-item>
             </el-submenu>
             <el-menu-item index="4"><a href="https://prometheus.io/docs/prometheus/latest/getting_started/">帮助</a></el-menu-item>
           </el-menu>
