@@ -1,6 +1,7 @@
 <template>
 
   <div id="app">
+
       <div id="main-page" v-if="!showLogin">
         <div class="header">
           <el-menu
@@ -26,8 +27,10 @@
             <el-menu-item index="4"><a href="https://prometheus.io/docs/prometheus/latest/getting_started/">帮助</a></el-menu-item>
             <el-submenu index="5">
               <template slot="title">操作</template>
+              <el-menu-item  href="#" @click="logout()" target="_self">登出</el-menu-item>
+
             </el-submenu>
-            <button  href="#" @click="logout()" target="_self">登出</button>
+
 
           </el-menu>
         </div>
@@ -90,60 +93,61 @@
       </div>
 
       <div id="login" v-if="showLogin" >
-      <div class="login-center center-width">
-        <div class="center-right">
-          <h1>用户登录</h1>
-          <span>USER &nbsp;&nbsp;LOGIN</span>
-          <a-form layout="horizontal" :form="form">
-            <a-form-item>
-              <a-input v-decorator="[
-                                              'user',
-                                              { rules: [{ required: true, message: '请输入用户名' }] }
-                                            ]"
-                       placeholder="请输入用户名">
-                <a-icon
-                        slot="prefix"
-                        type="user"
-                        style="color: rgba(0,0,0,.25)"
-                />
-              </a-input>
-            </a-form-item>
-            <a-form-item>
-              <a-input v-decorator="[
-                                              'password',
-                                              { rules: [{ required: true, message: '请输入密码' }] }
-                                            ]"
-                       placeholder="请输入密码">
-                <a-icon
-                        slot="prefix"
-                        type="lock"
-                        style="color: rgba(0,0,0,.25)"
-                />
-              </a-input>
-            </a-form-item>
-            <!--<a-form-item>
-              <a-input v-decorator="[
-                                              'pass',
-                                              { rules: [{ required: true, message: '请输入验证码!' }] }
-                                            ]"
-                       placeholder="请输入验证码">
-                <a-icon
-                        slot="prefix"
-                        type="safety-certificate"
-                        style="color: rgba(0,0,0,.25)"
-                />
-              </a-input>
-              <a-button class="verify" @click="sendCode" :disabled="disabled" :loading="loading_code">{{validateText}}</a-button>
-            </a-form-item>-->
-            <a-form-item>
-              <a-button type="primary" htmlType="submit" class="login-form-button" @click="login">
-                登录
-              </a-button>
-            </a-form-item>
-          </a-form>
+        <div class="login-center center-width">
+          <div class="center-right">
+            <h1>用户登录</h1>
+            <span>USER &nbsp;&nbsp;LOGIN</span>
+            <a-form layout="horizontal" :form="form">
+              <a-form-item>
+                <a-input v-decorator="[
+                                                'user',
+                                                { rules: [{ required: true, message: '请输入用户名' }] }
+                                              ]"
+                         placeholder="请输入用户名">
+                  <a-icon
+                          slot="prefix"
+                          type="user"
+                          style="color: rgba(0,0,0,.25)"
+                  />
+                </a-input>
+              </a-form-item>
+              <a-form-item>
+                <a-input v-decorator="[
+                                                'password',
+                                                { rules: [{ required: true, message: '请输入密码' }] }
+                                              ]"
+                         placeholder="请输入密码">
+                  <a-icon
+                          slot="prefix"
+                          type="lock"
+                          style="color: rgba(0,0,0,.25)"
+                  />
+                </a-input>
+              </a-form-item>
+<!--              <a-form-item>-->
+<!--                <a-input v-decorator="[-->
+<!--                                                'pass',-->
+<!--                                                { rules: [{ required: true, message: '请输入验证码!' }] }-->
+<!--                                              ]"-->
+<!--                         placeholder="请输入验证码">-->
+<!--                  <a-icon-->
+<!--                          slot="prefix"-->
+<!--                          type="safety-certificate"-->
+<!--                          style="color: rgba(0,0,0,.25)"-->
+<!--                  />-->
+<!--                </a-input>-->
+<!--                <a-button class="verify" @click="sendCode" :disabled="disabled" :loading="loading_code">{{validateText}}</a-button>-->
+<!--              </a-form-item>-->
+              <a-form-item>
+                <a-button type="primary" htmlType="submit" class="login-form-button" @click="login">
+                  登录
+                </a-button>
+              </a-form-item>
+            </a-form>
+          </div>
         </div>
-      </div>
     </div>
+
   </div>
 
 </template>
@@ -167,7 +171,8 @@ export default {
       spin: false,
       showLogin: true,
       form: this.$form.createForm(this),
-      token:'token'
+      token:'token',
+      validateText:''
 
     }
   },
