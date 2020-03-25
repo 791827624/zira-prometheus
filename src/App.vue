@@ -1,4 +1,5 @@
 <template>
+
   <div id="app">
       <div id="main-page" v-if="!showLogin">
         <div class="header">
@@ -23,17 +24,15 @@
               <el-menu-item index="2-6"><a href="http://101.132.169.36:9090/service-discovery" target="_blank">服务与发现</a></el-menu-item>
             </el-submenu>
             <el-menu-item index="4"><a href="https://prometheus.io/docs/prometheus/latest/getting_started/">帮助</a></el-menu-item>
+            <el-submenu index="5">
+              <template slot="title">操作</template>
+            </el-submenu>
+            <button  href="#" @click="logout()" target="_self">登出</button>
+
           </el-menu>
         </div>
         <div class="circle" v-for="cItem in dataHtml" :key="cItem.id">
           <div class="page">
-
-<!--            <tr v-for="item in search(this.dataHtml.value)" :key="item.id">-->
-<!--              <td>{{item.id}}</td>-->
-<!--              <td></td>-->
-<!--              <td></td>-->
-<!--            </tr>-->
-<!--            {{dataHtml[0].value}}-->
             <div class="title">
               <el-input v-model.trim="cItem.value" placeholder="输入要查询的指标名称" ></el-input>
               <ul v-for="item in search(options)"
@@ -82,15 +81,15 @@
           </div>
         </div>
 
-<!--        {{this.selection.data}}-->
-
         <div class="operation">
           <el-button type="primary" @click="addGraph">
             添加查询
           </el-button>
         </div>
+
       </div>
-    <div id="login" v-if="showLogin" >
+
+      <div id="login" v-if="showLogin" >
       <div class="login-center center-width">
         <div class="center-right">
           <h1>用户登录</h1>
@@ -146,16 +145,13 @@
       </div>
     </div>
   </div>
+
 </template>
 
 <script>
 import axios from 'axios';
 import { message } from 'ant-design-vue';
-//   'go_gc_duration_seconds_count',
-//   'go_gc_duration_seconds_sum', 'go_goroutines', 'go_info', 'go_memstats_alloc_bytes',
-//   'go_memstats_alloc_bytes_total', 'go_memstats_buck_hash_sys_bytes', 'go_memstats_frees_total',
-// 'go_memstats_gc_cpu_fraction', 'go_memstats_gc_sys_bytes', 'go_memstats_heap_alloc_bytes',
-// 'go_memstats_heap_idle_bytes', 'go_memstats_heap_inuse_bytes', 'go_memstats_heap_objects'
+
 export default {
   name: 'App',
   data () {
@@ -171,6 +167,7 @@ export default {
       spin: false,
       showLogin: true,
       form: this.$form.createForm(this),
+      token:'token'
 
     }
   },
@@ -206,7 +203,19 @@ export default {
        this.dataHtml.push({ id: this.id, value: '', dataSource: [], spin: false });
      },
      login () {
-       this.showLogin = false;
+       localStorage.setItem(this.token,Math.random()*10+Math.random()*100);
+       if(localStorage.getItem("token") != null){
+         this.showLogin = false;
+         setTimeout( ()=> {
+           this.logout();
+         },300000)
+       }else{
+         this.showLogin=true;
+       }
+     },
+     logout(){
+        localStorage.clear(0);
+        this.showLogin=true
      },
      Get(){
        axios({
@@ -223,15 +232,26 @@ export default {
          message.error('请求异常!');
        })
      },
+     check(){
+        setTimeout(function () {
+          this.logout();
+        },4000)
+     }
 
    },
-  mounted() {
+  mounted(){
     document.querySelector('#login').style.height = document.documentElement.clientHeight + 'px';
+    if(localStorage.getItem("token") != null){
+      this.showLogin = false;
+    }else{
+      this.showLogin=true;
+    }
 
   },
   created() {
-    this.Get()
-  }
+    this.Get();
+    }
+
 }
 </script>
 
