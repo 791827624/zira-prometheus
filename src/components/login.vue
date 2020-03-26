@@ -1,13 +1,17 @@
 <template>
-    <div id="login" v-if="showLogin" >
+    <div id="login" v-if="showLogin">
         <div class="login-center center-width">
             <div class="center-right">
                 <h1>用户登录</h1>
                 <span>USER &nbsp;&nbsp;LOGIN</span>
-                <a-form layout="horizontal" :form="form">
+<!--                {{logsub.mail}}-->
+<!--                {{logsub.password}}-->
+<!--                {{logsub}}-->
+                <a-form layout="horizontal"  >
                     <a-form-item>
-                        <a-input v-decorator="[
-                                                'user',
+
+                        <a-input v-model="logsub[0].mail" v-decorator="[
+                                                'name',
                                                 { rules: [{ required: true, message: '请输入用户名' }] }
                                               ]"
                                  placeholder="请输入用户名">
@@ -19,7 +23,7 @@
                         </a-input>
                     </a-form-item>
                     <a-form-item>
-                        <a-input type="password" v-decorator="[
+                        <a-input v-model="logsub[0].password" type="password" v-decorator="[
                                                 'password',
                                                 { rules: [{ required: true, message: '请输入密码'}] }
                                               ]"
@@ -76,8 +80,10 @@
                 showLogin: true,
                 form: this.$form.createForm(this),
                 token:'token',
-                validateText:''
-
+                validateText:'',
+                logsub:[{mail:'',password:''}],
+                // mail:'',
+                // password:''
             }
         },
         methods: {
@@ -112,21 +118,50 @@
             //     this.dataHtml.push({ id: this.id, value: '', dataSource: [], spin: false });
             // },
             login () {
-                localStorage.setItem(this.token,Math.random()*10+Math.random()*100);
-                if(localStorage.getItem("token") != null){
-                    this.showLogin = false;
-                    location.reload();
-                    setTimeout(() => {
-                        this.logout();
-                    },1000000)
-                }else{
-                    this.showLogin=true;
-                }
+
+                axios({
+                    method:'post',
+                    url:'http://localhost:8763/user/valid',
+                    data: this.logsub[0]
+
+                }).then( res =>{
+                    localStorage.setItem(this.token,res.data.id)
+                    if(localStorage.getItem("token") != null && res.data.id!=null){
+                        this.showLogin=false;
+                        location.reload();
+                        setTimeout(()=>{
+                            this.logout()
+                        },1000000)
+                    }else{
+                        this.showLogin=true;
+                        alert("输入正确的用户名或密码");
+                        this.logsub=[{mail:'',password:''}];
+                        // location.reload()
+                    }
+                }).catch( () => {
+                    message.error('请求异常!');
+                })
+
+
+
+                // localStorage.setItem(this.token,Math.random()*10+Math.random()*100);
+                // if(localStorage.getItem("token") != null){
+                //     this.showLogin = false;
+                //     location.reload();
+                //     setTimeout(() => {
+                //         this.logout();
+                //     },1000000)
+                // }else{
+                //     this.showLogin=true;
+                //     // console.log(localStorage.getItem("token") === null)
+                //
+                // }
             },
             logout(){
                 localStorage.clear(0);
                 this.showLogin=true;
                 location.reload();
+                message.error('请求异常!');
 
             },
             Get(){
@@ -155,11 +190,11 @@
                 this.showLogin = true;
             }
         },
-        // created() {
-        //
-        //     this.Get();
-        //
-        // }
+        created() {
+
+            this.Get();
+
+        }
 
     }
 </script>

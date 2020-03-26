@@ -11,6 +11,7 @@ module.exports = {
         proxy: {
             './': {
                 target: 'http://localhost:9090',
+                timeout:6000,
                 changeOrigin: true,
                 secure: false,
                 /*pathRewrite: { }*/

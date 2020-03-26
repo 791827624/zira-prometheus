@@ -1,19 +1,30 @@
 <template>
   <div id="app">
+
     <router-view></router-view>
+
   </div>
+
 </template>
 
 <script>
-    import router from "./router/router";
+  // eslint-disable-next-line no-unused-vars
+   import axios from 'axios';
+  // eslint-disable-next-line no-unused-vars
+   import { message } from 'ant-design-vue';
     export default {
       name: 'App',
+      method:{
+
+    }
+      ,
       mounted(){
-            if (localStorage.getItem("token")){
-                router.push("/main-page")
+            if (localStorage.getItem("token") != undefined && localStorage.getItem("token") != null){
+                this.$router.push("/main-page")
             }else{
-                router.push("/login")
+                this.$router.push("/login")
             }
+            // this.login()
       }
 
     }
