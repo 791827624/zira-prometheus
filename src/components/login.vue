@@ -121,7 +121,7 @@
 
                 axios({
                     method:'post',
-                    url:'http://101.132.169.36:8763/user/valid',
+                    url:'/user/valid',
                     data: this.logsub[0]
 
                 }).then( res =>{
