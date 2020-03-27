@@ -183,7 +183,7 @@
         },
         mounted(){
             document.querySelector('#login').style.height = document.documentElement.clientHeight + 'px';
-            if(localStorage.getItem("token") != null){
+            if(localStorage.getItem("token") != undefined && localStorage.getItem("token") != null){
                 this.showLogin = false;
             }else{
 

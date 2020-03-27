@@ -19,10 +19,14 @@
     }
       ,
       mounted(){
-            if (localStorage.getItem("token") != undefined && localStorage.getItem("token") != null){
-                this.$router.push("/main-page")
+            if (localStorage.getItem("token") == undefined){
+                // this.$router.push("/main-page")
+              this.$router.push("/login")
+
             }else{
-                this.$router.push("/login")
+                // this.$router.push("/login")
+              this.$router.push("/main-page")
+
             }
             // this.login()
       }
