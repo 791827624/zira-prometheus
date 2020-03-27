@@ -191,7 +191,7 @@
             }
         },
         created() {
-            console.log("你看到我了");
+            console.log("你看到我了!!");
             this.Get();
         }
 
