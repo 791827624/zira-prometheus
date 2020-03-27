@@ -68,7 +68,7 @@
                                 <a-list itemLayout="horizontal" :dataSource="cItem.dataSource" style="text-align: left;">
                                     <a-list-item slot="renderItem" slot-scope="item">
                                         <a-list-item-meta
-                                                :description="item.metric.instance + '' + item.metric.job + '' + item.metric.version"
+                                                :description="'实例名称 = '+item.metric.instance + ', 任务 = ' + item.metric.job+'，版本 = ' + item.metric.version"
                                         >
                                             <a slot="title" href="javascript:;">{{item.metric.__name__}}</a>
                                         </a-list-item-meta>
