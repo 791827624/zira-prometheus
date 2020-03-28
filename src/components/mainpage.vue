@@ -134,9 +134,17 @@
                         query: this.dataHtml.filter( item => item.id === id)[0].value
                     }
                 }).then( res => {
-                    const { result } = res.data.data;
-                    this.dataHtml.filter( item => item.id === id)[0].dataSource = result;
-                    this.dataHtml.filter( item => item.id === id)[0].spin = false;
+                    if (localStorage.getItem("token")){
+                        const { result } = res.data.data;
+                        this.dataHtml.filter( item => item.id === id)[0].dataSource = result;
+                        this.dataHtml.filter( item => item.id === id)[0].spin = false;
+                        setTimeout(()=>{
+                            this.logout()
+                        },1000000)
+                    }else {
+                        this.showLogin=true
+                    }
+
                 }).catch( () => {
                     message.error('请求异常!');
                     this.dataHtml.filter( item => item.id === id)[0].spin = false;
@@ -184,8 +192,13 @@
             }
 
         },
+        watch:{
+            token(){
+                location.reload();
+            }
+        },
         mounted(){
-
+            this.Get();
         },
         created() {
             // if(localStorage.getItem("token") != undefined && localStorage.getItem("token") != null){
@@ -193,7 +206,6 @@
             // }else{
             //     this.showLogin = true;
             // }
-            this.Get();
             if ( localStorage.getItem("token") == null || localStorage.getItem("token").length<10){
                 this.showLogin = true;
 
