@@ -135,7 +135,7 @@
                         query: this.dataHtml.filter( item => item.id === id)[0].value
                     }
                 }).then( res => {
-                    if (localStorage.getItem("token")>10){
+                    if (localStorage.getItem("token").length>10){
                         const { result } = res.data.data;
                         this.dataHtml.filter( item => item.id === id)[0].dataSource = result;
                         this.dataHtml.filter( item => item.id === id)[0].spin = false;
