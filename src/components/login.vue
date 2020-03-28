@@ -79,11 +79,11 @@
                 spin: false,
                 showLogin: true,
                 form: this.$form.createForm(this),
-                token:'token',
+                // token:'',
+                // c:'',
                 validateText:'',
                 logsub:[{mail:'',password:''}],
-                // mail:'',
-                // password:''
+                a:{token:"token",c:''}
             }
         },
         methods: {
@@ -125,7 +125,7 @@
                     data: this.logsub[0]
 
                 }).then( res =>{
-                    localStorage.setItem(this.token,res.data.id)
+                    localStorage.setItem(this.a.token,res.data.id)
                     if(localStorage.getItem("token") != null && res.data.id!=null){
                         this.showLogin=false;
                         location.reload();

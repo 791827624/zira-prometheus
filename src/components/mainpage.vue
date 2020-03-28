@@ -114,8 +114,10 @@
                 spin: false,
                 showLogin: true,
                 form: this.$form.createForm(this),
-                token:'token',
-                validateText:''
+                // token:'token',
+                validateText:'',
+                a:{token:"token",c:''}
+
 
             }
         },
@@ -194,14 +196,14 @@
 
         },
         watch:{
-            token(){
-                alert("token改变,请重新登录");
-                location.reload();
+
+            c(){
+                    alert("token改变,请重新登录");
+                    location.reload();
             }
         },
         mounted(){
             this.Get();
-            this.token=localStorage.getItem("token")
         },
         created() {
             // if(localStorage.getItem("token") != undefined && localStorage.getItem("token") != null){
