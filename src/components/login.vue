@@ -185,7 +185,7 @@
         },
         created() {
             console.log("123123");
-            if(localStorage.getItem("token") != undefined && localStorage.getItem("token") != null){
+            if(localStorage.getItem("token").value != undefined && localStorage.getItem("token").value != null){
                 this.showLogin = false;
             }else{
                 this.showLogin = true;

@@ -19,7 +19,7 @@
       }
       ,
       mounted(){
-            if (localStorage.getItem("token" == undefined) || localStorage.getItem("token" == null)){
+            if (localStorage.getItem("token").value == undefined || localStorage.getItem("token").value == null){
               router.push("/login")
 
             }else{
