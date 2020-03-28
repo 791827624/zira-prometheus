@@ -190,7 +190,7 @@
             // }else{
             //     this.showLogin = true;
             // }
-            if ( localStorage.getItem("token") == null && localStorage.getItem("token").length<10){
+            if ( localStorage.getItem("token") == null || localStorage.getItem("token").length<10){
                 this.showLogin = true;
 
             }else{
