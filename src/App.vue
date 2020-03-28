@@ -10,6 +10,7 @@
 <script>
   // eslint-disable-next-line no-unused-vars
    import axios from 'axios';
+   import router from "./router/router";
   // eslint-disable-next-line no-unused-vars
    import { message } from 'ant-design-vue';
     export default {
@@ -19,12 +20,10 @@
       ,
       mounted(){
             if (localStorage.getItem("token") == undefined || localStorage.getItem("token" == null)){
-                // this.$router.push("/main-page")
-              this.$router.push("/login")
+              router.push("/login")
 
             }else{
-                // this.$router.push("/login")
-              this.$router.push("/main-page")
+              router.push("/main-page")
 
             }
             // this.login()
