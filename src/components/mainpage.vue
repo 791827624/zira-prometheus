@@ -195,12 +195,13 @@
         },
         watch:{
             token(){
-                alert("token改变");
+                alert("token改变,请重新登录");
                 location.reload();
             }
         },
         mounted(){
             this.Get();
+            this.token=localStorage.getItem("token")
         },
         created() {
             // if(localStorage.getItem("token") != undefined && localStorage.getItem("token") != null){
