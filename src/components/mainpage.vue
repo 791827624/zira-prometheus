@@ -1,5 +1,6 @@
 <template>
     <div id="main-page" v-if="!showLogin">
+        <input v-model="token" v-show="false">
         <div class="header">
             <el-menu
                     :default-active="activeIndex2"
@@ -194,6 +195,7 @@
         },
         watch:{
             token(){
+                alert("token改变");
                 location.reload();
             }
         },
