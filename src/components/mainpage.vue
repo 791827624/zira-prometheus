@@ -188,12 +188,18 @@
 
         },
         created() {
-            if(localStorage.getItem("token").value != undefined && localStorage.getItem("token").value != null){
-                this.showLogin = false;
-            }else{
-                this.showLogin = true;
-            }
+            // if(localStorage.getItem("token") != undefined && localStorage.getItem("token") != null){
+            //     this.showLogin = false;
+            // }else{
+            //     this.showLogin = true;
+            // }
             this.Get();
+            if ( localStorage.getItem("token").value == null || localStorage.getItem("token").value === undefined){
+                this.showLogin = true;
+
+            }else{
+                false
+            }
 
         }
 

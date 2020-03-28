@@ -184,11 +184,17 @@
 
         },
         created() {
-            console.log("123123");
-            if(localStorage.getItem("token").value != undefined && localStorage.getItem("token").value != null){
-                this.showLogin = false;
-            }else{
+            console.log("hey，你看到我了");
+            // if(localStorage.getItem("token").value != undefined && localStorage.getItem("token").value != null){
+            //     this.showLogin = false;
+            // }else{
+            //     this.showLogin = true;
+            // }
+            if ( localStorage.getItem("token").value == null || localStorage.getItem("token").value === undefined){
                 this.showLogin = true;
+
+            }else{
+                false
             }
             this.Get();
 
