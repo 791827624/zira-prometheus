@@ -17,7 +17,10 @@
       name: 'App',
       method:{
 
-      }
+      },
+        watch:{
+
+        }
       ,
       mounted(){
             if ( localStorage.getItem("token") == null || localStorage.getItem("token").length<10 ){
