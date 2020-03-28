@@ -145,7 +145,7 @@
 
 
                 // localStorage.setItem(this.token,Math.random()*10+Math.random()*100);
-                // if(localStorage.getItem("token") != null){
+                // if(localStorage.getItem("token") != null && localStorage.getItem("token" != undefined)){
                 //     this.showLogin = false;
                 //     location.reload();
                 //     setTimeout(() => {
@@ -153,8 +153,6 @@
                 //     },1000000)
                 // }else{
                 //     this.showLogin=true;
-                //     // console.log(localStorage.getItem("token") === null)
-                //
                 // }
             },
             logout(){
@@ -183,16 +181,17 @@
         },
         mounted(){
             document.querySelector('#login').style.height = document.documentElement.clientHeight + 'px';
-            if(localStorage.getItem("token") != undefined && localStorage.getItem("token") != null){
-                this.showLogin = false;
-            }else{
 
-                this.showLogin = true;
-            }
         },
         created() {
             console.log("123123");
+            if(localStorage.getItem("token") != undefined && localStorage.getItem("token") != null){
+                this.showLogin = false;
+            }else{
+                this.showLogin = true;
+            }
             this.Get();
+
         }
 
     }

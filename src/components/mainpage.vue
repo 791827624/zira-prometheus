@@ -165,7 +165,6 @@
                 localStorage.clear(0);
                 this.showLogin=true;
                 alert("退出登录");
-                // message.error('请求异常!');
                 location.reload();
             },
             Get(){
@@ -186,16 +185,14 @@
 
         },
         mounted(){
-            // document.querySelector('#login').style.height = document.documentElement.clientHeight + 'px';
+
+        },
+        created() {
             if(localStorage.getItem("token") != undefined && localStorage.getItem("token") != null){
                 this.showLogin = false;
             }else{
-
                 this.showLogin = true;
             }
-        },
-        created() {
-
             this.Get();
 
         }

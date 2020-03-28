@@ -15,11 +15,10 @@
     export default {
       name: 'App',
       method:{
-
-    }
+      }
       ,
       mounted(){
-            if (localStorage.getItem("token") == undefined){
+            if (localStorage.getItem("token") == undefined || localStorage.getItem("token" == null)){
                 // this.$router.push("/main-page")
               this.$router.push("/login")
 
