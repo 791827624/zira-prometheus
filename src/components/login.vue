@@ -31,7 +31,7 @@
         rule:{
           username:[
             {required:true,message:'输入用户名',trigger:'blur'},
-            {min:8,max:20,message: '用户名长度在8-20之间',trigger:'blur'}
+            {min:8,max:30,message: '用户名长度在8-30之间',trigger:'blur'}
             ],
           password:[
             {required:true,message:'输入密码',trigger:'blur'},
