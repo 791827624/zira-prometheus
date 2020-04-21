@@ -12,6 +12,9 @@
       method:{
       },
       mounted(){
+        if ( !localStorage.getItem("token") || localStorage.getItem("token").length<10){
+          this.$router.push('/login')
+        }
       }
 
     }

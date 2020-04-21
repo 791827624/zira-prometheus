@@ -179,6 +179,7 @@
                 this.id++;
                 this.id--;
                 this.Get();
+           
         },
         created() {
             if ( localStorage.getItem("token") == null || localStorage.getItem("token").length<10){
