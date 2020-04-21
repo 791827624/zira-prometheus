@@ -1,6 +1,5 @@
 <template>
-    <div id="main-page" v-if="!showLogin">
-        <input v-model="token" v-show="false">
+    <div id="main-page" >
         <div class="header">
             <el-menu
                     :default-active="activeIndex2"
@@ -10,7 +9,7 @@
                     background-color="#545c64"
                     text-color="#fff"
                     active-text-color="#ffd04b"
-                    v-if="!showLogin">
+                    >
                 <el-menu-item index="1" disabled>Web consoles</el-menu-item>
                 <el-menu-item index="3"><a href="http://101.132.169.36:9090/alerts">告警</a></el-menu-item>
                 <el-menu-item index="5">Web consoles</el-menu-item>
@@ -37,14 +36,6 @@
             <div class="page">
                 <div class="title">
                     <el-input v-model.trim="cItem.value" placeholder="输入要查询的指标名称" ></el-input>
-<!--                    <ul v-for="item in search(options[cItem.id])"-->
-<!--                        role="listbox"-->
-<!--                        :key="item"-->
-<!--                        :label="item"-->
-<!--                        style="top: 38px; left: 5px; display: block;">-->
-
-<!--                    </ul>-->
-<!--                    {{cItem[cItem.id].value}}-->
                     <div class="button-area">
                         <el-button type="primary" @click="getJson(cItem.id)">查询</el-button>
                         <el-select v-model="cItem.value" placeholder="- insert -">
@@ -61,6 +52,7 @@
 
                         </el-select>
                     </div>
+
                 </div>
                 <div class="tab">
                     <el-tabs type="border-card">
@@ -83,7 +75,6 @@
                 </div>
             </div>
         </div>
-
         <div class="operation">
             <el-button type="primary" @click="addGraph">
                 添加查询
@@ -95,129 +86,104 @@
 
 <script>
 
-    import axios from 'axios';
-    import { message } from 'ant-design-vue';
+    // import axios from 'axios';
+    // import { message } from 'ant-design-vue';
     require('../public/images/login-bg.png')
 
     export default {
         name: 'App',
         data () {
             return {
+                // msg:'',
                 id: 1,
                 kw:'',
-                dataHtml: [{ id: 1, value: '', dataSource: [], spin: false }],
+                dataHtml: [{ id: 1, value: 'go_info', dataSource: [], spin: false }],
                 options: [],
-                selection:[{id:1,value:''},{id:2,value:''}],
+                option:[],
                 value: '',
                 activeIndex2: '5',
                 dataSource: [],
                 spin: false,
                 showLogin: true,
                 form: this.$form.createForm(this),
-                // token:'token',
                 validateText:'',
-                a:{token:"token",c:''}
+                token:"token",
 
 
             }
         },
         methods: {
-            search(){
-                return this.options.filter(item => item.includes(this.dataHtml[0].value.substring(0,5)))
+            search(value){
+                // console.log(this.options)
+                return this.options.filter(item => item.includes(value))
             },
             handleSelect(key, keyPath) {
                 console.log(key, keyPath);
             },
             getJson (id) {
                 this.dataHtml.find( item => item.id === id).spin = true;
-                axios({
-                    url: '/api/v1/query',
-                    method: 'get',
-                    params: {
-                        query: this.dataHtml.filter( item => item.id === id)[0].value
-                    }
-                }).then( res => {
-                    if (localStorage.getItem("token").length>10){
-                        const { result } = res.data.data;
-                        this.dataHtml.filter( item => item.id === id)[0].dataSource = result;
-                        this.dataHtml.filter( item => item.id === id)[0].spin = false;
+                this.getRequest('/api/v1/query',{
+                    query:this.dataHtml.filter( item => item.id === id)[0].value
+                }).then(resp => {
+                    if(!resp) return this.dataHtml.find( item => item.id === id).spin = false
+                    if(localStorage.getItem("token").length>10) {
+                        console.log(resp.data)
+                        const { result } = resp.data;
+                        console.log(result)
+                        this.dataHtml.find( item => item.id === id).dataSource = result;
+                        this.dataHtml.find( item => item.id === id).spin = false;
                         setTimeout(()=>{
                             this.logout()
                         },1000000)
-                    }else {
-                        this.logout()
                     }
-
-                }).catch( () => {
-                    message.error('请求异常!');
-                    this.dataHtml.filter( item => item.id === id)[0].spin = false;
                 })
+        
             },
             remove (id) {
                 this.dataHtml = this.dataHtml.filter( item => item.id !== id);
             },
             addGraph () {
                 this.id++;
-                this.dataHtml.push({ id: this.id, value: '', dataSource: [], spin: false });
+                this.dataHtml.push({ id: this.id, value: 'go_info', dataSource: [], spin: false });
             },
-            // login () {
-            //     localStorage.setItem(this.token,Math.random()*10+Math.random()*100);
-            //     if(localStorage.getItem("token") != null){
-            //         this.showLogin = false;
-            //         // location.reload();
-            //         setTimeout(() => {
-            //             this.logout();
-            //         },100000)
-            //     }else{
-            //         this.showLogin=true;
-            //     }
-            // },
+
             logout(){
                 localStorage.clear(0);
-                this.showLogin=true;
-                alert("退出登录");
-                location.reload();
+                this.$message.success("退出登录");
+                this.$router.go(-1)
             },
             Get(){
-                axios({
-                    url:'/api/v1/label/__name__/values',
-                    method:'get',
-                    params:{
-                        _:'123'
-                    }
-                }).then( res =>{
-                    this.options = res.data.data
-                    // this.options=[...this.options,...this.selection.data]
-                    // console.log(this.options)
-                }).catch( () => {
-                    message.error('请求异常!');
+                this.getRequest('/api/v1/label/__name__/values',{
+                    _:123
+                }).then(res => {
+                    this.options=res.data
+                    // console.log(res.data)
                 })
+                // axios({
+                //     url:'/api/v1/label/__name__/values',
+                //     method:'get',
+                //     params:{
+                //         _:'123'
+                //     }
+                // }).then( res =>{
+
+                //     this.options=res.data.data
+                    
+                // }).catch( () => {
+                //     message.error('请求异常!');
+                // })
             }
 
-        },
-        watch:{
-
-            c(){
-                    alert("token改变,请重新登录");
-                    location.reload();
-            }
         },
         mounted(){
-            this.Get();
+                this.id++;
+                this.id--;
+                this.Get();
         },
         created() {
-            // if(localStorage.getItem("token") != undefined && localStorage.getItem("token") != null){
-            //     this.showLogin = false;
-            // }else{
-            //     this.showLogin = true;
-            // }
             if ( localStorage.getItem("token") == null || localStorage.getItem("token").length<10){
-                this.showLogin = true;
-
-            }else{
-                this.showLogin = false;
+                this.$router.go(-1)
             }
-
         }
 
     }
@@ -252,115 +218,5 @@
         text-align: left;
         padding-left: 30px;
     }
-    #login{
-        background: url("../public/images/login-bg.png") no-repeat;
-        background-size: cover;
-        min-width: 1200px;
-        /deep/ .ant-btn{
-            span{
-                font-size: 16px;
-            }
-        }
-        .center-width{
-            width: 1200px;
-            margin: 0 auto;
-        }
-        .login-center{
-            padding-top: 250px;
-            display: flex;
-            flex-direction: row;
-            justify-content: flex-end;
-            .center-right{
-                width: 400px;
-                height: 400px;
-                text-align: left;
-                h1{
-                    font-size: 24px;
-                    color: #4452D5;
-                    font-weight: normal;
-                }
-                span{
-                    font-size: 14px;
-                    color: #B5B5B5;
-                }
-                .ant-input{
-                    width: 300px;
-                    height: 40px;
-                }
-                span{
-                    color:#B5B5B5;
-                }
-                /deep/ .login-form-button{
-                    width: 300px;
-                    height: 40px;
-                    margin-top: 5px;
-                    span{
-                        font-size: 17px !important;
-                        color: white;
-                    }
-                }
-                /deep/ .ant-form-item{
-                    margin-top: 25px;
-                    input{
-                        padding-left: 40px;
-                    }
-                }
-                /deep/ .ant-form-item:first-child{
-                    margin-top: 25px;
-                }
-                /deep/ .ant-form-item:nth-child(2){
-                    margin-bottom: 25px;
-                }
-                /deep/.ant-form-item:nth-child(3){
-                    margin-top: 0;
-                    input{
-                        width: 170px;
-                    }
-                }
-                .register{
-                    margin-top: 0px;
-                    span{
-                        color: #1C93FF;
-                        cursor: pointer;
-                        margin-left: 5px;
-                        &:hover{
-                            text-decoration: underline;
-                        }
-                    }
-                }
-                .has-success{
-                    line-height: 0px;
-                }
-                /deep/ .ant-input-affix-wrapper{
-                    width: 300px;
-                    height: 40px;
-                }
-                /deep/ .ant-form-item{
-                    &:nth-child(2){
-                        margin-bottom: 25px;
-                        .ant-input-affix-wrapper{
-                            width: 150px;
-                            height: 40px;
-                        }
-                    }
-                    &:nth-child(4){
-                        margin-top: 0;
-                    }
-                }
-                .verify{
-                    height: 40px;
-                    margin-left: 10px;
-                }
-                /deep/ .ant-btn{
-                    span{
-                        font-size: 14px;
-                    }
-                }
-            }
-            /deep/ .ant-input-prefix{
-                font-size: 16px !important;
-                left: 10px;
-            }
-        }
-    }
+    
 </style>

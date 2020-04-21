@@ -1,11 +1,11 @@
 import Vue from "vue";
 import VueRouter from 'vue-router'
-import('../components/mainpage.vue')
-import('../components/login.vue')
 Vue.use(VueRouter);
 
 const router = new  VueRouter({
+    mode:'history',
     routes:[
+        {path:'/',redirect:'/login'},
         {
             path:'/login',
             component:()=>import('../components/login.vue')
@@ -19,6 +19,15 @@ const router = new  VueRouter({
             component:()=>import('../components/login.vue')
         }
     ]
+})
+
+router.beforeEach((to,from,next) => {
+    if (to.path === '/login') return next()
+
+    const tokenStr = window.localStorage.getItem('token')
+    if(!tokenStr) return next('/login')
+    next()
+
 })
 
 export default router

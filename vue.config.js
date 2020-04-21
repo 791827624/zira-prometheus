@@ -3,7 +3,7 @@ module.exports = {
     publicPath:'./',
 
     devServer: {
-        port:8081,
+        port:8083,
         overlay: { //通过设置让浏览器 overlay 同时显示警告和错误
             warnings: true,
             errors: true
