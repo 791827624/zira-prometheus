@@ -54,14 +54,16 @@
       login:function () {
         this.$refs.loginFormRef.validate(async valid => {
           if(!valid) return;
-          this.postRequest('/user/valid',this.loginForm)
-              .then(res => {
-                localStorage.setItem('token',res.data.id)
-                if(localStorage.getItem('token') != null && res.data.id!=null) {
-                    this.$router.push('/main-page')
+          this.postRequest('/user/valid',{
+            username: this.loginForm.username,
+            password: this.loginForm.password
+          }).then(res => {
+                localStorage.setItem('token',res.id)
+                if(res && res.status == 200) {
+                  console.log('success')
+                  this.$router.push('/main-page')
                 }
               })
-              console.log('success')
         })
       },
       submitClick: function () {
