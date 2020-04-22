@@ -59,8 +59,9 @@
             password: this.loginForm.password
           }).then(resp => {
             console.log(resp)
+            console.log(resp.status)
             localStorage.setItem('token',resp.id)
-            if(resp && resp.status == 200) {
+            if(resp.id) {
               console.log('success')
               this.$router.push('/main-page')
             }
