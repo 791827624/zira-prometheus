@@ -57,20 +57,21 @@
           this.postRequest('/user/valid',{
             username: this.loginForm.username,
             password: this.loginForm.password
-          }).then(res => {
-                localStorage.setItem('token',res.id)
-                if(res && res.status == 200) {
-                  console.log('success')
-                  this.$router.push('/main-page')
-                }
-              })
+          }).then(resp => {
+            console.log(resp)
+            localStorage.setItem('token',resp.id)
+            if(resp && resp.status == 200) {
+              console.log('success')
+              this.$router.push('/main-page')
+            }
+          })
         })
       },
       submitClick: function () {
         let _this=this;
         this.loading = true;
         this.postRequest('/login',{
-          username: this.loginForm.username,
+          mail: this.loginForm.username,
           password: this.loginForm.password
         }).then(res =>{
           _this.loading = false;
