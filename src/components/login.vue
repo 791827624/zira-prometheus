@@ -55,7 +55,7 @@
         this.$refs.loginFormRef.validate(async valid => {
           if(!valid) return;
           this.postRequest('/user/valid',{
-            username: this.loginForm.username,
+            mail: this.loginForm.username,
             password: this.loginForm.password
           }).then(resp => {
             console.log(resp)
